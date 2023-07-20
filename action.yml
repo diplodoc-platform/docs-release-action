@@ -1,0 +1,57 @@
+name: docs-release-action
+description: Build & Upload Docs & Release
+
+inputs:
+  revision:
+    required: true
+  src-root:
+    required: true
+    default: './'
+  s3-bucket:
+    required: true
+  s3-endpoint:
+    required: true
+  s3-access-key-id:
+    required: true
+  s3-secret-access-key:
+    required: true
+  s3-region:
+    required: true
+  lint-root:
+    default: './_docs-lint'
+  build-root:
+    default: './_docs-build'
+
+runs:
+  using: composite
+  steps:
+    - name: Build
+      uses: diplodoc-platform/docs-build-action@v1
+      with:
+        src-root: ${{ inputs.src-root }}
+        revision: ${{ inputs.revision }}
+        s3-bucket: ${{ inputs.s3-bucket }}
+        s3-endpoint: ${{ inputs.s3-endpoint }}
+        s3-access-key-id: ${{ inputs.s3-access-key-id }}
+        s3-secret-access-key: ${{ inputs.s3-secret-access-key }}
+        s3-region: ${{ inputs.s3-region }}
+        lint-root: ${{ inputs.lint-root }}
+        build-root: ${{ inputs.build-root }}
+    - name: Create head folder
+      shell: bash
+      run: mkdir -p head
+    - name: Write revision to head file
+      shell: bash
+      run: |
+        echo "{ \"revision\": \"${{ inputs.revision }}\" }" > head/head
+    - name: Upload head file to S3
+      uses: jakejarvis/s3-sync-action@7ed8b112447abb09f1da74f3466e4194fc7a6311
+      with:
+        args: --content-type=application/json
+      env:
+        SOURCE_DIR: "head"
+        AWS_S3_BUCKET: ${{ inputs.s3-bucket }}
+        AWS_S3_ENDPOINT: ${{ inputs.s3-endpoint }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.s3-access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.s3-secret-access-key }}
+        AWS_REGION: ${{ inputs.s3-region }}
