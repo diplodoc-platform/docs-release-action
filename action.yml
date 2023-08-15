@@ -4,6 +4,8 @@ description: Build & Upload Docs & Release
 inputs:
   revision:
     required: true
+  project-name:
+    required: true
   src-root:
     required: true
     default: "./"
@@ -21,6 +23,8 @@ inputs:
     default: "./_docs-lint"
   build-root:
     default: "./_docs-build"
+  shared-storage-bucket:
+    default: false
 
 runs:
   using: composite
@@ -30,6 +34,7 @@ runs:
       with:
         src-root: ${{ inputs.src-root }}
         revision: ${{ inputs.revision }}
+        project-name: ${{ inputs.project-name }}
         storage-bucket: ${{ inputs.storage-bucket }}
         storage-endpoint: ${{ inputs.storage-endpoint }}
         storage-access-key-id: ${{ inputs.storage-access-key-id }}
@@ -37,6 +42,7 @@ runs:
         storage-region: ${{ inputs.storage-region }}
         lint-root: ${{ inputs.lint-root }}
         build-root: ${{ inputs.build-root }}
+        shared-storage-bucket: ${{ inputs.shared-storage-bucket }}
     - name: Create head folder
       shell: bash
       run: mkdir -p head
@@ -50,6 +56,7 @@ runs:
         args: --content-type=application/json
       env:
         SOURCE_DIR: "head"
+        DEST_DIR: ${{ inputs.shared-storage-bucket == 'true' && inputs.project-name}}
         AWS_S3_BUCKET: ${{ inputs.storage-bucket }}
         AWS_S3_ENDPOINT: ${{ inputs.storage-endpoint }}
         AWS_ACCESS_KEY_ID: ${{ inputs.storage-access-key-id }}
