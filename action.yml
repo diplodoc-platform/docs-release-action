@@ -24,13 +24,14 @@ inputs:
   build-root:
     default: "./_docs-build"
   shared-storage-bucket:
+    type: boolean
     default: false
 
 runs:
   using: composite
   steps:
     - name: Build
-      uses: diplodoc-platform/docs-build-action@v1
+      uses: ./actions/build
       with:
         src-root: ${{ inputs.src-root }}
         revision: ${{ inputs.revision }}
@@ -43,22 +44,13 @@ runs:
         lint-root: ${{ inputs.lint-root }}
         build-root: ${{ inputs.build-root }}
         shared-storage-bucket: ${{ inputs.shared-storage-bucket }}
-    - name: Create head folder
-      shell: bash
-      run: mkdir -p head
-    - name: Write revision to head file
+    - name: Update head
       shell: bash
       run: |
-        echo "{ \"revision\": \"${{ inputs.revision }}\" }" > head/head
-    - name: Upload head file to storage
-      uses: jakejarvis/s3-sync-action@7ed8b112447abb09f1da74f3466e4194fc7a6311
-      with:
-        args: --content-type=application/json
-      env:
-        SOURCE_DIR: "head"
-        DEST_DIR: ${{ inputs.shared-storage-bucket == 'true' && inputs.project-name}}
-        AWS_S3_BUCKET: ${{ inputs.storage-bucket }}
-        AWS_S3_ENDPOINT: ${{ inputs.storage-endpoint }}
-        AWS_ACCESS_KEY_ID: ${{ inputs.storage-access-key-id }}
-        AWS_SECRET_ACCESS_KEY: ${{ inputs.storage-secret-access-key }}
-        AWS_REGION: ${{ inputs.storage-region }}
+        curl \
+          --header "Content-Type: application/json" \
+          --header "x-docs-bucket: ${{ inputs.storage-bucket }}" \
+          --header "x-docs-is-common-bucket: ${{ inputs.shared-storage-bucket }}" \
+          --request POST \
+          --data '{"revision":"${{ inputs.revision }}","project":"${{ inputs.project-name }}", "accessKeyId":"${{ inputs.storage-access-key-id }}", "secretAccessKey":"${{ inputs.storage-secret-access-key }}"}' \
+          https://${{ inputs.project-name }}.viewer.diplodoc.com/_/api/head
