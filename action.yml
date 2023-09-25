@@ -31,7 +31,7 @@ runs:
   using: composite
   steps:
     - name: Build
-      uses: ./actions/build
+      uses: diplodoc-platform/docs-build-action@v1
       with:
         src-root: ${{ inputs.src-root }}
         revision: ${{ inputs.revision }}
