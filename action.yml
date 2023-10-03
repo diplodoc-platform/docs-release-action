@@ -20,7 +20,7 @@ inputs:
   storage-region:
     required: true
   version:
-    default: null
+    default: ""
   lint-root:
     default: "./_docs-lint"
   build-root:
@@ -54,5 +54,5 @@ runs:
           --header "x-docs-bucket: ${{ inputs.storage-bucket }}" \
           --header "x-docs-is-common-bucket: ${{ inputs.shared-storage-bucket }}" \
           --request POST \
-          --data '{"revision":"${{ inputs.version }}","revision":"${{ inputs.version }}","project":"${{ inputs.project-name }}", "accessKeyId":"${{ inputs.storage-access-key-id }}", "secretAccessKey":"${{ inputs.storage-secret-access-key }}"}' \
+          --data '{"revision":"${{ inputs.revision }}","revision":"${{ inputs.version }}","project":"${{ inputs.project-name }}", "accessKeyId":"${{ inputs.storage-access-key-id }}", "secretAccessKey":"${{ inputs.storage-secret-access-key }}"}' \
           https://${{ inputs.project-name }}.viewer.diplodoc.com/_/api/head
