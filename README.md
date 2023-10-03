@@ -10,6 +10,7 @@
 - `storage-access-key-id` (required) - The access key ID associated with the account that has permission to access and upload to the specified storage bucket.
 - `storage-secret-access-key` (required) - The secret access key associated with the account.
 - `storage-region` (required) - The region where the specified storage bucket is located.
+- `version` (default: empty string) - The documentation version name.
 - `lint-root` (default: `./_docs-lint`) - The root directory for the linting process. This is an optional parameter, and if not specified, the default value will be used.
 - `build-root` (default: `./_docs-build`) - The root directory for the built documentation. This is an optional parameter, and if not specified, the default value will be used.
 - `shared-storage-bucket` (default: `false`) - Flag whether the bucket is shared across multiple projects.
