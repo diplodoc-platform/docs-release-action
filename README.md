@@ -1,4 +1,4 @@
-# docs-build-action GitHub Action
+# docs-release-action GitHub Action
 
 ## Inputs
 
@@ -15,7 +15,9 @@
 - `build-root` (default: `./_docs-build`) - The root directory for the built documentation. This is an optional parameter, and if not specified, the default value will be used.
 - `shared-storage-bucket` (default: `false`) - Flag whether the bucket is shared across multiple projects.
 
-## Example
+## Examples
+
+### Release revision
 
 ```yaml
 name: Release
@@ -33,6 +35,36 @@ jobs:
         uses: diplodoc-platform/docs-release-action@v1
         with:
           revision: "${{ github.sha }}"
+          project-name: ${{ secrets.DIPLODOC_PROJECT_NAME }}
+          src-root: "./docs"
+          storage-bucket: ${{ secrets.DIPLODOC_STORAGE_BUCKET }}
+          storage-endpoint: ${{ vars.DIPLODOC_STORAGE_ENDPOINT }}
+          storage-access-key-id: ${{ secrets.DIPLODOC_ACCESS_KEY_ID }}
+          storage-secret-access-key: ${{ secrets.DIPLODOC_SECRET_ACCESS_KEY }}
+          storage-region: ${{ vars.DIPLODOC_STORAGE_REGION }}
+```
+
+### Release version
+
+```yaml
+name: Release tag
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Release
+        uses: diplodoc-platform/docs-release-action@v1
+        with:
+          revision: "${{ github.sha }}"
+          version: "${{ github.ref_name }}"
           project-name: ${{ secrets.DIPLODOC_PROJECT_NAME }}
           src-root: "./docs"
           storage-bucket: ${{ secrets.DIPLODOC_STORAGE_BUCKET }}
