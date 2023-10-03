@@ -33,11 +33,11 @@ jobs:
         uses: diplodoc-platform/docs-release-action@v1
         with:
           revision: "${{ github.sha }}"
-          project-name: ${{ secrets.DOCS_PROJECT_NAME }}
+          project-name: ${{ secrets.DIPLODOC_PROJECT_NAME }}
           src-root: "./docs"
-          storage-bucket: ${{ secrets.DOCS_AWS_BUCKET }}
-          storage-endpoint: ${{ vars.DOCS_AWS_ENDPOINT }}
-          storage-access-key-id: ${{ secrets.DOCS_AWS_KEY_ID }}
-          storage-secret-access-key: ${{ secrets.DOCS_AWS_SECRET_ACCESS_KEY }}
-          storage-region: ${{ vars.DOCS_AWS_REGION }}
+          storage-bucket: ${{ secrets.DIPLODOC_STORAGE_BUCKET }}
+          storage-endpoint: ${{ vars.DIPLODOC_STORAGE_ENDPOINT }}
+          storage-access-key-id: ${{ secrets.DIPLODOC_ACCESS_KEY_ID }}
+          storage-secret-access-key: ${{ secrets.DIPLODOC_SECRET_ACCESS_KEY }}
+          storage-region: ${{ vars.DIPLODOC_STORAGE_REGION }}
 ```
