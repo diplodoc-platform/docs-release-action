@@ -3,17 +3,11 @@
 ## Inputs
 
 - `revision` (required) - The revision or version identifier for the documentation to be built.
-- `project-name` (required) - The documentation's project name, as specified in the configuration file's field with the corresponding name.
-- `src-root` (required) - The root directory where the source documentation files are located. The action will use this directory as the base location to look for the source files that need to be built.
 - `storage-bucket` (required) - The name of the storage bucket where the built documentation will be stored. After the documentation is successfully built, it will be uploaded to this specified bucket.
-- `storage-endpoint` (required) - The endpoint URL of the storage service.
 - `storage-access-key-id` (required) - The access key ID associated with the account that has permission to access and upload to the specified storage bucket.
 - `storage-secret-access-key` (required) - The secret access key associated with the account.
-- `storage-region` (required) - The region where the specified storage bucket is located.
 - `version` (default: empty string) - The documentation version name.
-- `lint-root` (default: `./_docs-lint`) - The root directory for the linting process. This is an optional parameter, and if not specified, the default value will be used.
-- `build-root` (default: `./_docs-build`) - The root directory for the built documentation. This is an optional parameter, and if not specified, the default value will be used.
-- `shared-storage-bucket` (default: `false`) - Flag whether the bucket is shared across multiple projects.
+- `server` (default: 'https://viewer.diplodoc.com') - The documentation version name.
 
 ## Examples
 
@@ -29,19 +23,13 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Release
         uses: diplodoc-platform/docs-release-action@v1
         with:
           revision: "${{ github.sha }}"
-          project-name: ${{ secrets.DIPLODOC_PROJECT_NAME }}
-          src-root: "./docs"
           storage-bucket: ${{ secrets.DIPLODOC_STORAGE_BUCKET }}
-          storage-endpoint: ${{ vars.DIPLODOC_STORAGE_ENDPOINT }}
           storage-access-key-id: ${{ secrets.DIPLODOC_ACCESS_KEY_ID }}
           storage-secret-access-key: ${{ secrets.DIPLODOC_SECRET_ACCESS_KEY }}
-          storage-region: ${{ vars.DIPLODOC_STORAGE_REGION }}
 ```
 
 ### Release version
@@ -58,18 +46,35 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Release
         uses: diplodoc-platform/docs-release-action@v1
         with:
           revision: "${{ github.sha }}"
           version: "${{ github.ref_name }}"
-          project-name: ${{ secrets.DIPLODOC_PROJECT_NAME }}
-          src-root: "./docs"
           storage-bucket: ${{ secrets.DIPLODOC_STORAGE_BUCKET }}
-          storage-endpoint: ${{ vars.DIPLODOC_STORAGE_ENDPOINT }}
           storage-access-key-id: ${{ secrets.DIPLODOC_ACCESS_KEY_ID }}
           storage-secret-access-key: ${{ secrets.DIPLODOC_SECRET_ACCESS_KEY }}
-          storage-region: ${{ vars.DIPLODOC_STORAGE_REGION }}
+```
+### Release on custom server
+
+```yaml
+name: Release tag
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release
+        uses: diplodoc-platform/docs-release-action@v1
+        with:
+          server: "https://my.custom.docs.server.com"
+          revision: "${{ github.sha }}"
+          storage-bucket: ${{ secrets.DIPLODOC_STORAGE_BUCKET }}
+          storage-access-key-id: ${{ secrets.DIPLODOC_ACCESS_KEY_ID }}
+          storage-secret-access-key: ${{ secrets.DIPLODOC_SECRET_ACCESS_KEY }}
 ```
