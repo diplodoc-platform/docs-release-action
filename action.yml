@@ -1,58 +1,34 @@
 name: docs-release-action
-description: Build & Upload Docs & Release
+description: Register new stable version of documentation
 
 inputs:
   revision:
     required: true
-  project-name:
-    required: true
-  src-root:
-    required: true
-    default: "./"
   storage-bucket:
-    required: true
-  storage-endpoint:
     required: true
   storage-access-key-id:
     required: true
   storage-secret-access-key:
     required: true
-  storage-region:
-    required: true
   version:
     default: ""
-  lint-root:
-    default: "./_docs-lint"
-  build-root:
-    default: "./_docs-build"
-  shared-storage-bucket:
-    type: boolean
-    default: false
+  server:
+    default: "https://viewer.diplodoc.com"
 
 runs:
   using: composite
   steps:
-    - name: Build
-      uses: diplodoc-platform/docs-build-action@v1
-      with:
-        src-root: ${{ inputs.src-root }}
-        revision: ${{ inputs.revision }}
-        project-name: ${{ inputs.project-name }}
-        storage-bucket: ${{ inputs.storage-bucket }}
-        storage-endpoint: ${{ inputs.storage-endpoint }}
-        storage-access-key-id: ${{ inputs.storage-access-key-id }}
-        storage-secret-access-key: ${{ inputs.storage-secret-access-key }}
-        storage-region: ${{ inputs.storage-region }}
-        lint-root: ${{ inputs.lint-root }}
-        build-root: ${{ inputs.build-root }}
-        shared-storage-bucket: ${{ inputs.shared-storage-bucket }}
     - name: Update head
       shell: bash
       run: |
         curl \
           --header "Content-Type: application/json" \
-          --header "x-docs-bucket: ${{ inputs.storage-bucket }}" \
-          --header "x-docs-is-common-bucket: ${{ inputs.shared-storage-bucket }}" \
           --request POST \
-          --data '{"revision":"${{ inputs.revision }}","version":"${{ inputs.version }}","project":"${{ inputs.project-name }}", "accessKeyId":"${{ inputs.storage-access-key-id }}", "secretAccessKey":"${{ inputs.storage-secret-access-key }}"}' \
-          https://${{ inputs.project-name }}.viewer.diplodoc.com/_/api/head
+          --data '{\
+            "revision":"${{ inputs.revision }}",\
+            "version":"${{ inputs.version }}",\
+            "project":"${{ inputs.storage-bucket }}",\
+            "accessKeyId":"${{ inputs.storage-access-key-id }}",\
+            "secretAccessKey":"${{ inputs.storage-secret-access-key }}"\
+          }' \
+          ${{ inputs.server }}/_/api/head
