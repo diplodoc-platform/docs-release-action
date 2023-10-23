@@ -41,5 +41,5 @@ runs:
           exit 0
         fi
         
-        echo "::error:: $(jq '.message' -r RESPONSE)"
+        echo "::error::$(jq '.message' -r RESPONSE)"
         exit 1

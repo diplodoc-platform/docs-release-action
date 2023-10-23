@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release
-        uses: diplodoc-platform/docs-release-action@v1
+        uses: diplodoc-platform/docs-release-action@v2
         with:
           revision: "${{ github.sha }}"
           storage-bucket: ${{ secrets.DIPLODOC_STORAGE_BUCKET }}
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release
-        uses: diplodoc-platform/docs-release-action@v1
+        uses: diplodoc-platform/docs-release-action@v2
         with:
           revision: "${{ github.sha }}"
           version: "${{ github.ref_name }}"
@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release
-        uses: diplodoc-platform/docs-release-action@v1
+        uses: diplodoc-platform/docs-release-action@v2
         with:
           server: "https://my.custom.docs.server.com"
           revision: "${{ github.sha }}"
