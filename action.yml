@@ -23,8 +23,11 @@ runs:
       run: |
         set -e
         
-        curl \
+        RESPONSE_CODE=$(curl \
           --header "Content-Type: application/json" \
+          --silent \
+          --output response.txt \
+          --write-out "%{http_code}" \
           --data-binary @- \
           ${{ inputs.server }}/_/api/head <<EOF
         {
@@ -34,4 +37,15 @@ runs:
           "accessKeyId":"${{ inputs.storage-access-key-id }}",
           "secretAccessKey":"${{ inputs.storage-secret-access-key }}"
         }
-        EOF
+        EOF)
+        
+        if [[ "$RESPONSE_CODE" == "200" ]]; then
+          exit 0
+        fi
+        
+        RESPONSE_MESSAGE=$(cat response.txt)
+        RESPONSE_MESSAGE=${RESPONSE_MESSAGE/\{\"message\":\"/ }
+        RESPONSE_MESSAGE=${RESPONSE_MESSAGE/\"\}/ }
+        
+        echo "::error:: ${RESPONSE_MESSAGE}"
+        exit 1
