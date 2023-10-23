@@ -21,6 +21,8 @@ runs:
     - name: Update head
       shell: bash
       run: |
+        set -e
+        
         curl \
           --header "Content-Type: application/json" \
           --data-binary @- \
