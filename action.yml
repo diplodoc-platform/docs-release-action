@@ -23,12 +23,13 @@ runs:
       run: |
         curl \
           --header "Content-Type: application/json" \
-          --request POST \
-          --data '{\
-            "revision":"${{ inputs.revision }}",\
-            "version":"${{ inputs.version }}",\
-            "project":"${{ inputs.storage-bucket }}",\
-            "accessKeyId":"${{ inputs.storage-access-key-id }}",\
-            "secretAccessKey":"${{ inputs.storage-secret-access-key }}"\
-          }' \
-          ${{ inputs.server }}/_/api/head
+          --data-binary @- \
+          ${{ inputs.server }}/_/api/head <<EOF
+        {
+          "revision":"${{ inputs.revision }}",
+          "version":"${{ inputs.version }}",
+          "project":"${{ inputs.storage-bucket }}",
+          "accessKeyId":"${{ inputs.storage-access-key-id }}",
+          "secretAccessKey":"${{ inputs.storage-secret-access-key }}"
+        }
+        EOF
