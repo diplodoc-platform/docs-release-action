@@ -44,8 +44,8 @@ runs:
         fi
         
         RESPONSE_MESSAGE=$(cat response.txt)
-        RESPONSE_MESSAGE=${RESPONSE_MESSAGE/\{\"message\":\"/ }
-        RESPONSE_MESSAGE=${RESPONSE_MESSAGE/\"\}/ }
+        RESPONSE_MESSAGE=${RESPONSE_MESSAGE/\{\"message\":\"/}
+        RESPONSE_MESSAGE=${RESPONSE_MESSAGE/\"\}/}
         
         echo "::error:: ${RESPONSE_MESSAGE}"
         exit 1
