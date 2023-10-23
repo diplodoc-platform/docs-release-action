@@ -29,7 +29,7 @@ runs:
           --output RESPONSE \
           --write-out "%{http_code}" \
           --data-binary @- \
-          ${{ inputs.server }}/_/api/head << $(jq -c -n '{
+          ${{ inputs.server }}/_/api/head <<< $(jq -c -n '{
                 revision:"${{ inputs.revision }}",
                 version:"${{ inputs.version }}",
                 project:"${{ inputs.storage-bucket }}",
