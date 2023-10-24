@@ -7,7 +7,7 @@
 - `storage-access-key-id` (required) - The access key ID associated with the account that has permission to access and upload to the specified storage bucket.
 - `storage-secret-access-key` (required) - The secret access key associated with the account.
 - `version` (default: empty string) - The documentation version name.
-- `server` (default: 'https://viewer.diplodoc.com') - The documentation version name.
+- `server` (default: 'https://viewer.diplodoc.com') - The root URL of the server.
 
 ## Examples
 
