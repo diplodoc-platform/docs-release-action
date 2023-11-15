@@ -16,6 +16,7 @@ This GitHub action registers new stable version of documentation.
 Create a file named `.github/workflows/release.yml` in your repo.
 
 This workflow performs the following:
+- Checks for changes to run the build for documentation only
 - Builds the documentation
 - Uploads build output to the storage
 - Registers new stable version of documentation
@@ -31,7 +32,20 @@ on:
       - main
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - './docs/**'
+      - name: Check for changes
+        if: steps.changes.outputs.src == 'false'
+        run: 'exit 1'
   build:
+    needs: check-changes
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
