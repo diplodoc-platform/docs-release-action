@@ -48,7 +48,7 @@ jobs:
     permissions: write-all
     steps:
       - name: Upload
-        uses: diplodoc-platform/docs-upload-action@v3
+        uses: diplodoc-platform/docs-upload-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           storage-endpoint: ${{ vars.DIPLODOC_STORAGE_ENDPOINT }}
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release
-        uses: diplodoc-platform/docs-release-action@v3
+        uses: diplodoc-platform/docs-release-action@v2
         with:
           revision: "${{ github.sha }}"
           storage-bucket: ${{ vars.DIPLODOC_STORAGE_BUCKET }}
@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release
-        uses: diplodoc-platform/docs-release-action@v3
+        uses: diplodoc-platform/docs-release-action@v2
         with:
           revision: "${{ github.sha }}"
           version: "${{ github.ref_name }}"
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release
-        uses: diplodoc-platform/docs-release-action@v3
+        uses: diplodoc-platform/docs-release-action@v2
         with:
           server: "https://my.custom.docs.server.com"
           revision: "${{ github.sha }}"
