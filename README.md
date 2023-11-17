@@ -28,24 +28,12 @@ on:
   workflow_dispatch:
   pull_request:
     types: [closed]
+    paths: 'docs/**'
     branches:
       - main
 
 jobs:
-  check-changes:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            src:
-              - './docs/**'
-      - name: Check for changes
-        if: steps.changes.outputs.src == 'false'
-        run: 'exit 1'
   build:
-    needs: check-changes
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -90,6 +78,7 @@ name: Release tag
 
 on:
   push:
+    paths: 'docs/**'
     tags:
       - 'v*.*.*'
 
@@ -117,6 +106,7 @@ name: Release
 on:
   workflow_dispatch:
   pull_request:
+    paths: 'docs/**'
     types: [closed]
     branches:
       - main
