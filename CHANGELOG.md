@@ -1,3 +1,5 @@
+## [2.1.1](https://github.com/diplodoc-platform/docs-release-action/compare/v2.1.0...v2.1.1) (2024-01-30)
+
 ## [2.1.0](https://github.com/diplodoc-platform/docs-release-action/compare/v2.0.5...v2.1.0) (2024-01-30)
 
 
