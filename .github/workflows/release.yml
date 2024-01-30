@@ -1,0 +1,44 @@
+name: Release
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v5
+        with:
+          github-token: ${{ secrets.github_token }}
+          output-file: 'CHANGELOG.md'
+          preset: 'conventionalcommits'
+          version-file: './version.json'
+          skip-git-pull: 'true'
+          skip-on-empty: 'false'
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+
+      - name: Update SemVer tag
+        uses: zyactions/update-semver@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        with:
+         tag: ${{ steps.changelog.outputs.tag }}
