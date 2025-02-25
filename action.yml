@@ -12,24 +12,32 @@ inputs:
     required: true
   version:
     default: ""
+  update-only-version:
+    required: false
+    default: "false"
   server:
     default: "https://viewer.diplodoc.com"
 
 runs:
   using: composite
   steps:
-    - name: Update head
+    - name: Update version or head
       shell: bash
       run: |
         set -e
-        
+
+        ENDPOINT="head"
+        if [[ "${{ inputs.update-only-version }}" == "true" ]]; then
+          ENDPOINT="versions"
+        fi
+
         RESPONSE_CODE=$(curl \
           --header "Content-Type: application/json" \
           --silent \
           --output RESPONSE \
           --write-out "%{http_code}" \
           --data-binary @- \
-          ${{ inputs.server }}/_/api/head <<< $(jq -c -n '{
+          ${{ inputs.server }}/_/api/$ENDPOINT <<< $(jq -c -n '{
                 revision:"${{ inputs.revision }}",
                 version:"${{ inputs.version }}",
                 project:"${{ inputs.storage-bucket }}",
