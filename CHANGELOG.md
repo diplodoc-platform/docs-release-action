@@ -1,3 +1,10 @@
+## [2.2.0](https://github.com/diplodoc-platform/docs-release-action/compare/v2.1.1...v2.2.0) (2025-02-27)
+
+
+### Features
+
+* add update-only-version param ([#5](https://github.com/diplodoc-platform/docs-release-action/issues/5)) ([e53c0e9](https://github.com/diplodoc-platform/docs-release-action/commit/e53c0e946f0cec9dd71494479a79c7475da9c21a))
+
 ## [2.1.1](https://github.com/diplodoc-platform/docs-release-action/compare/v2.1.0...v2.1.1) (2024-01-30)
 
 ## [2.1.0](https://github.com/diplodoc-platform/docs-release-action/compare/v2.0.5...v2.1.0) (2024-01-30)
