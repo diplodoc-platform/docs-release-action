@@ -1,3 +1,10 @@
+## [2.3.0](https://github.com/diplodoc-platform/docs-release-action/compare/v2.2.0...v2.3.0) (2025-05-09)
+
+
+### Features
+
+* echo prod link ([#6](https://github.com/diplodoc-platform/docs-release-action/issues/6)) ([b9221e7](https://github.com/diplodoc-platform/docs-release-action/commit/b9221e764147a294fb524466b05e91c3e3eaf30d))
+
 ## [2.2.0](https://github.com/diplodoc-platform/docs-release-action/compare/v2.1.1...v2.2.0) (2025-02-27)
 
 
