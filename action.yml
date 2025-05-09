@@ -17,6 +17,9 @@ inputs:
     default: "false"
   server:
     default: "https://viewer.diplodoc.com"
+  project-link:
+    required: false
+    description: "Link to the documentation project"
 
 runs:
   using: composite
@@ -51,3 +54,12 @@ runs:
         
         echo "::error::$(jq '.message' -r RESPONSE)"
         exit 1
+        
+    - name: Generate documentation link
+      if: inputs.project-link != ''
+      shell: bash
+      run: |
+        DOC_LINK="${{ inputs.project-link }}"
+        echo "::notice title=Documentation Link::The production version of the documentation is available at: $DOC_LINK"
+        echo "### Documentation Link" >> $GITHUB_STEP_SUMMARY
+        echo "The production version of the documentation is available at: $DOC_LINK" >> $GITHUB_STEP_SUMMARY
